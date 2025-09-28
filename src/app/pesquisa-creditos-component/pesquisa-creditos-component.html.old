@@ -1,0 +1,59 @@
+<!-- <p>pesquisa-creditos-component works!</p> -->
+<div class="container mt-4">
+  <h2>Consulta de Créditos</h2>
+
+  <!-- Formulário de busca -->
+  <form (ngSubmit)="buscarCreditos()" class="form-inline flex-column flex-md-row mb-3">
+    <!-- Campo NFS-e -->
+    <div class="form-group mb-2 mr-2">
+      <label for="numeroNfse" class="mr-2">NFS-e:</label>
+<!--       <input -->
+<!--         type="text" -->
+<!--         id="numeroNfse" -->
+<!--         [(ngModel)]="numeroNfse" -->
+<!--         name="numeroNfse" -->
+<!--         class="form-control" -->
+<!--         placeholder="Número NFS-e" -->
+<!--       /> -->
+    </div>
+    <!-- Campo Número do Crédito -->
+    <div class="form-group mb-2 mr-2">
+      <label for="numeroCredito" class="mr-2">Número Crédito:</label>
+<!--       <input -->
+<!--         type="text" -->
+<!--         id="numeroCredito" -->
+<!--         [(ngModel)]="numeroCredito" -->
+<!--         name="numeroCredito" -->
+<!--         class="form-control" -->
+<!--         placeholder="Número Crédito" -->
+<!--       /> -->
+    </div>
+    <!-- Botão de busca -->
+    <button type="submit" class="btn btn-primary mb-2">Buscar</button>
+  </form>
+
+  <!-- Exibir tabela se houver resultados -->
+  <div *ngIf="creditos && creditos.length > 0" class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Número</th>
+          <th>Descrição</th>
+<!--           <th>Valor</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let credito of creditos">
+          <td>{{ credito.numero }}</td>
+          <td>{{ credito.descricao }}</td>
+<!--           <td>{{ credito.valor | currency:'BRL' }}</td> -->
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Mensagem de nenhum resultado -->
+  <div *ngIf="creditos && creditos.length === 0 && buscou">
+    <p>Nenhum crédito encontrado.</p>
+  </div>
+</div>

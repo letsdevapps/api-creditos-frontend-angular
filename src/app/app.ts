@@ -1,12 +1,15 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterModule } from '@angular/router';
+//import { PesquisaCreditosComponent } from './pesquisa-creditos-component/pesquisa-creditos-component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [RouterOutlet, RouterModule],
+//  imports: [RouterOutlet, RouterModule, PesquisaCreditosComponent],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrls: ['./app.css']
 })
-export class App {
+export class AppComponent {
   protected readonly title = signal('frontend-angular');
 }
