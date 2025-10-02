@@ -1,5 +1,55 @@
-<!-- <p>pesquisa-creditos-component works!</p> -->
 <div class="container mt-4">
-  <h2>Consulta de Créditos</h2>
+	<h2>Consulta de Créditos</h2>
+	<form (ngSubmit)="search()">
+  		<input type="text" [(ngModel)]="searchTerm" placeholder="Digite o número da NFSE ou Crédito"
+  			name="searchInput" (keydown.enter)="search()">
+	  	<div>
+	  		<label>
+    			<input type="radio" [(ngModel)]="searchType" name="searchType" value="credito"> Buscar por Crédito
+  			</label>
+  			<label>
+    			<input type="radio" [(ngModel)]="searchType" name="searchType" value="nfse"> Buscar por NFSE
+  			</label>
+		</div>
+<!-- 	  	<button (click)="search()">Buscar</button> -->
+		<button type="submit">Buscar</button>
+	</form>
 
+	<div *ngIf="resultados.length > 0" style="margin-top: 20px;">
+	  <h3>Resultados da Pesquisa</h3>
+		<table>
+	    	<thead>
+	      		<tr>
+					<th>Numero Credito</th>
+					<th>Numero Nfse</th>
+					<th>Data Constituicao</th>
+					<th>Valor Issqn</th>
+					<th>Tipo Credito</th>
+					<th>Simples Nacional</th>
+					<th>Aliquota</th>
+					<th>Valor Faturado</th>
+					<th>Valor Deducao</th>
+					<th>Base Calculo</th>
+		      	</tr>
+			</thead>
+	    	<tbody>
+	      		<tr *ngFor="let credito of resultados">
+					<td>{{ credito.numeroCredito }}</td>
+			  		<td>{{ credito.numeroNfse }}</td>
+			  		<td>{{ credito.dataConstituicao | date:'dd/MM/yyyy'}}</td>
+			  		<td>{{ credito.valorIssqn | currency:'BRL':'symbol':'1.2-2'}}</td>
+			  		<td>{{ credito.tipoCredito }}</td>
+					<td>{{ credito.simplesNacional ? 'Sim' : 'Não'}}</td>
+					<td>{{ credito.aliquota }}</td>
+					<td>{{ credito.valorFaturado | currency:'BRL':'symbol':'1.2-2'}}</td>
+					<td>{{ credito.valorDeducao | currency:'BRL':'symbol':'1.2-2'}}</td>
+					<td>{{ credito.baseCalculo }}</td>
+	      		</tr>
+	    	</tbody>
+	  	</table>
+	</div>
+
+	<div *ngIf="resultados.length === 0">
+		<h3>Nenhum crédito encontrado</h3>
+	</div>
 </div>

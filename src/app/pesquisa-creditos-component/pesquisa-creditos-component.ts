@@ -1,102 +1,45 @@
-//import { Component, OnInit } from '@angular/core';
-//import { PesquisaCreditosService } from '../pesquisa-creditos-service/pesquisa-creditos-service';
-//import { Credito } from '../../model/credito.model';
-//
-//@Component({
-//  selector: 'app-pesquisa-creditos',
-//  templateUrl: './pesquisa-creditos-component.html',
-//  styleUrls: ['./pesquisa-creditos-component.css']
-//})
-//export class PesquisaCreditosComponent implements OnInit {
-//
-//  creditos: Credito[] = [];
-//  numeroNfse: string = '7891011';
-//
-//  constructor(private minhaApi: PesquisaCreditosService) { }
-//
-//  ngOnInit(): void {
-//    this.buscarCreditos();
-//  }
-//
-//  buscarCreditos() {
-//    this.minhaApi.obterCreditosPorNfse(this.numeroNfse).subscribe(
-//      data => {
-//        this.creditos = data;
-//        console.log(this.creditos);
-//      },
-//      error => {
-//        console.error('Erro ao buscar créditos:', error);
-//      }
-//    );
-//  }
-//}
-
-//import { Component, OnInit } from '@angular/core';
-//import { PesquisaCreditosService } from '../pesquisa-creditos-service/pesquisa-creditos-service';
-//import { Credito } from '../../model/credito.model';
-//import { CommonModule } from '@angular/common';
-//
-//@Component({
-//  selector: 'app-pesquisa-creditos',
-//  standalone: true,
-//  imports: [CommonModule],
-//  templateUrl: './pesquisa-creditos-component.html',
-//  styleUrls: ['./pesquisa-creditos-component.css']
-//})
-//export class PesquisaCreditosComponent implements OnInit {
-//
-//  creditos: Credito[] = [];
-//  numeroNfse: string = '';
-//  numeroCredito: string = '';
-//  buscou: boolean = false;
-//
-//  constructor(private minhaApi: PesquisaCreditosService) { }
-//
-//  ngOnInit(): void {}
-//
-//  buscarCreditos() {
-//    this.buscou = true;
-//    if (this.numeroNfse.trim() !== '') {
-//      this.minhaApi.obterCreditosPorNfse(this.numeroNfse).subscribe(
-//        data => {
-//          this.creditos = data;
-//        },
-//        error => {
-//          console.error('Erro ao buscar créditos por NFS-e:', error);
-//          this.creditos = [];
-//        }
-//      );
-//    } else if (this.numeroCredito.trim() !== '') {
-//      this.minhaApi.obterCreditosPorNumeroCredito(this.numeroCredito).subscribe(
-//        data => {
-//          this.creditos = data;
-//        },
-//        error => {
-//          console.error('Erro ao buscar créditos por Número:', error);
-//          this.creditos = [];
-//        }
-//      );
-//    } else {
-//      this.creditos = [];
-//    }
-//  }
-//}
-
-import { Component } from '@angular/core';
+import { Credito } from '../../model/credito.model';
+import { CommonModule } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { RouterOutlet, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { PesquisaCreditosService } from '../pesquisa-creditos-service/pesquisa-creditos-service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-pesquisa-creditos',
   templateUrl: './pesquisa-creditos-component.html',
   styleUrls: ['./pesquisa-creditos-component.css'],
-  standalone: true
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterModule, FormsModule, HttpClientModule],
+  providers: [PesquisaCreditosService]
 })
 export class PesquisaCreditosComponent {
-  numeroNfse: string = '';
-  numeroCredito: string = '';
-  creditos: any[] = [];
+	searchTerm: string = '';
+	searchType: string = 'nfse';
+	resultados: Credito[] = [];
 
-  buscarCreditos() {
-    console.log("Buscando créditos...", this.numeroNfse, this.numeroCredito);
-    // Aqui você pode colocar a lógica de consulta via HTTP
-  }
+	constructor(private creditoService: PesquisaCreditosService) {}
+	
+	ngOnInit() {
+		this.search();
+	}
+
+	search(){
+		if (!this.searchTerm.trim()) {
+	      this.creditoService.getCreditos().subscribe((dados) => {
+	        this.resultados = dados;
+	      });
+	    } else {
+	      if (this.searchType === 'nfse') {
+	        this.creditoService.getCreditosPorNfse(this.searchTerm).subscribe((dados) => {
+	          this.resultados = dados;
+	        });
+	      } else {
+	        this.creditoService.getCreditoPorNumCredConstituido(this.searchTerm).subscribe((dados) => {
+	          this.resultados = dados;
+	        });
+	      }
+	   }
+	}
 }
