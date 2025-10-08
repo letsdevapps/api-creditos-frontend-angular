@@ -11,7 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
   templateUrl: './pesquisa-creditos-component.html',
   styleUrls: ['./pesquisa-creditos-component.css'],
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, RouterModule, FormsModule, HttpClientModule],
   providers: [PesquisaCreditosService]
 })
 export class PesquisaCreditosComponent {
